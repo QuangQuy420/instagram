@@ -1,7 +1,7 @@
 import * as React from 'react';
-import Footer from '@/components/Footer';
-import Story from '@/components/Story';
-import Post from '@/components/Post';
+import Footer from '../../components/Footer';
+import Story from '../../components/Story';
+import Post from '../../components/Post';
 
 export interface HomeProps {
 }

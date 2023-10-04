@@ -10,10 +10,10 @@ export default function Follower (props: FollowerProps) {
     <>
         <div>
             <Image
-            src="/images/avatar.jpg"
-            width={44}
-            height={44}
-            alt="Picture of the author"
+              src="/images/avatar.jpg"
+              width={44}
+              height={44}
+              alt="Picture of the author"
             />
         </div>
         <div className='flex flex-col'>

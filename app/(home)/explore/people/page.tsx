@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Follower from '../../../components/Follower';
+import Follower from '../../../../components/Follower';
 
 export interface AppProps {
 }

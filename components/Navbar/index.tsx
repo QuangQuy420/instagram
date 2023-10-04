@@ -45,7 +45,7 @@ export default function Navbar(props: NavbarProps) {
                 </div>
                 <div className="flex">
                     <FontAwesomeIcon className='w-6' icon={faUser} style={{color: "#000000",}} />
-                    <span>Frofile</span>
+                    <Link href='/pq.quy_'>Profile</Link>
                 </div>
                 <div className="flex">
                     <FontAwesomeIcon className='w-6' icon={faBars} style={{color: "#000000",}} />
