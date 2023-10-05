@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SignUpLogin from '../../../../components/SignUpLogIn';
+import SignUpLogin from '../../../../components/SignUpLogin';
 
 export interface SignUpProps {
 }
