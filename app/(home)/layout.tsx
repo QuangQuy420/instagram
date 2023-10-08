@@ -2,6 +2,7 @@ import '../globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Navbar from '../../components/Navbar'
+import { AuthProvider } from './Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,7 +24,9 @@ export default function HomeLayout({
                   <Navbar />
               </div>
               <div className='col-span-10'>
+                <AuthProvider>
                   {children}
+                </AuthProvider>
               </div>
           </div>
         </body>

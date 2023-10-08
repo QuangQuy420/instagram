@@ -3,7 +3,10 @@
 import * as React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useForm, SubmitHandler } from "react-hook-form"
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export interface SignUpLoginProps {
   signUp: boolean,
@@ -12,19 +15,112 @@ export interface SignUpLoginProps {
 
 export default function SignUpLogin (props: SignUpLoginProps) {
   const { signUp, submit } = props;
-  const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
-    console.log('submit');
+  const router = useRouter()
+  const { register, handleSubmit, reset, formState: { errors }, } = useForm();
+  const [emailExist, setEmailExist] = useState('');
+  const [usernameExist, setUsernameExist] = useState('');
+  const [registerSuccess, setSuccessRegister] = useState(false);
+  const [errorLogin, setErrorLogin] = useState('');
 
-    if(submit) {
-      console.log('have a submit!');
-      await submit('hehe');
+  /**
+   * Handles when the user clicks the submit button.
+   * Assumes that the `submit` and `signUp` variables are defined elsewhere.
+   * 
+   * @param data The info of the form, that the user input.
+   */
+  const onSubmit = async (data: any) => {
+    if (submit) {
+      if (signUp) {
+        await handleRegister(data);
+      } else {
+        await handleLogin(data);
+      }
     }
+  }
+  
+  /**
+   * Handles when the user registers a new account.
+   * Returns early if the user account already exists.
+   * 
+   * @param data the info include email, username, fullName and password.
+   * @returns When account already exist.
+   */
+  const handleRegister = async (data: any) => {
+    try {
+      const submitError = await submit(data);
+      if (submitError === 1) {
+        setEmailExist('Email already exists');
+        setUsernameExist('Username already exists');
+        return;
+      }
+      if (submitError === 2) {
+        setEmailExist('Email already exists');
+        return;
+      }
+      if (submitError === 3) {
+        setUsernameExist('Username already exists');
+        return;
+      }
+      reset()
+      if (signUp) {
+        setSuccessRegister(true);
+        setTimeout(() => {
+          router.push('/accounts/login')
+        }, 3000)
+        
+      }
+    } catch (error) {
+      throw new Error('Error when sending data to server');
+    }
+  }
+
+  /**
+   * Handle when login page.
+   * Replaces the current page with the home page if the user successfully logs in.
+   * 
+   * @param data The info include username and password.
+   * @returns Error when the info incorrect.
+   */
+  const handleLogin = async (data: any) => {
+    try {
+      const { username, password } = data;
+      const res = await signIn('credentials', {
+        username,
+        password,
+        redirect: false
+      });
+
+      if (res?.error) {
+        setErrorLogin('User name or password not correct!');
+        return;
+      }
+      router.replace('/');
+    } catch (error) {
+      throw new Error('Error when login');
+    }
+  }
+
+  /**
+   * When input, delete error on form
+   */
+  const onEmailChange = () => {
+    setEmailExist('');
+  }
+
+  /**
+   * When input, delete error on form
+   */
+  const onUsernameChange = () => {
+    setUsernameExist('');
+    setErrorLogin('');
+  }
+
+  /**
+   * When input, delete error on form
+   */
+  const onPasswordChange = () => {
+    setErrorLogin('');
   }
 
   return (
@@ -35,22 +131,21 @@ export default function SignUpLogin (props: SignUpLoginProps) {
               src="/images/instagram_logo.png"
               width={174}
               height={174}
-              alt="Picture of the author"
+              alt="The logo of instagram"
           />
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               {signUp && (
                 <>
                   <div className="mt-2">
                     <input
                       className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                      type="text"
                       placeholder='Mobile number or Email'
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
+                      {...register("email", { required: true, onChange: onEmailChange })}
                     />
+                    {(errors.mobileNumber || emailExist) && <span className='text-red-600'>{emailExist ? emailExist :'This field is required'}</span>}
                   </div>
 
                   <div className="mt-2">
@@ -58,9 +153,9 @@ export default function SignUpLogin (props: SignUpLoginProps) {
                       className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       type="text"
                       placeholder='Full name'
-                      onChange={(e) => setFullName(e.target.value)}
-                      required
+                      {...register("fullName", { required: true })}
                     />
+                    {errors.fullName && <span className='text-red-600'>This field is required</span>}
                   </div>
                 </>
               )}
@@ -70,9 +165,9 @@ export default function SignUpLogin (props: SignUpLoginProps) {
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                   type="text"
                   placeholder={signUp ? 'Username' : 'Phone number, Username or Email'}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
+                  {...register("username", { required: true, onChange: onUsernameChange })}
                 />
+                {(errors.username || usernameExist) && <span className='text-red-600'>{usernameExist ? usernameExist : 'This field is required'}</span>}
               </div>
 
               <div className="mt-2">
@@ -80,21 +175,24 @@ export default function SignUpLogin (props: SignUpLoginProps) {
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                   type="password"
                   placeholder='Password'
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
+                  {...register("password", { required: true, minLength: 6, onChange: onPasswordChange })}
                 />
+                {errors.password && <span className='text-red-600'>{errors.password.type === 'required' ? 'This field is required' : 'Password is at least 6 character'}</span>}
               </div>
+
+              {errorLogin && <span className='text-red-600'>{errorLogin}</span>}
 
             <div>
               <button
                 type="submit"
-                onClick={(e) => handleSubmit(e)}
                 className="flex w-full justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm"
               >
                 {signUp ? "Sign up" : "Log in"}
               </button>
             </div>
 
+            {registerSuccess && <span className='text-green-600'>Register successfully! You will be navigate to login page after 3 seconds</span>}
+            
             {!signUp && (
               <div className="flex items-center justify-center">
                 <div className="text-sm">

@@ -1,21 +1,25 @@
 import mongoose, { Schema } from "mongoose";
 
 const userScheme = new Schema({
+    email: {
+        type: String,
+        required: true
+    },
+    fullName: {
+        type: String,
+        required: true
+    },
     username: {
         type: String,
-        required: false
+        required: true
     },
     password: {
         type: String,
-        required: false
+        required: true
     },
     avatar: {
         type: String,
         required: false
-    },
-    nickname: {
-        type: String,
-        required: true
     },
     bio: {
         type: String,
@@ -23,7 +27,7 @@ const userScheme = new Schema({
     },
     gender: {
         type: String,
-        required: true
+        required: false
     }
 }, { timestamps: true })
 
