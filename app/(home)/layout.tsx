@@ -19,16 +19,16 @@ export default function HomeLayout({
     return (
       <html lang="en">
         <body>
-          <div className='grid grid-cols-12'>
-              <div className='col-span-2'>
-                  <Navbar />
-              </div>
-              <div className='col-span-10'>
-                <AuthProvider>
-                  {children}
-                </AuthProvider>
-              </div>
-          </div>
+          <AuthProvider>
+            <div className='grid grid-cols-12'>
+                <div className='col-span-2'>
+                    <Navbar />
+                </div>
+                <div className='col-span-10'>
+                    {children}
+                </div>
+            </div>
+          </AuthProvider>
         </body>
       </html>
     )

@@ -2,28 +2,41 @@ import * as React from 'react';
 import Image from 'next/image';
 import UserInfo from '../../../components/UserInfo';
 import Story from '../../../components/Story';
+import { getServerSession } from "next-auth";
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export interface UserProps {
 }
 
-async function getData() {
-  const res = await fetch('http://localhost:3000/api/users')
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
+/**
+ * Call api to get user information.
+ * 
+ * @param nickname 
+ * @returns Data about user
+ */
+async function getData(nickname: any) {
+  const res = await fetch('http://localhost:3000/api/users', {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ nickname: nickname })
+  })
  
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
+    throw new Error('Error in process get data user');
   }
  
   return res.json();
 }
 
 export default async function User (props: UserProps) {
-  const data = await getData();
-  console.log(data.users[0]);
-  
-  const { avatar, nickname, bio, gender } = JSON.parse(JSON.stringify(data.users[0]));
+  // Get data from session to call api
+  const session = await getServerSession(authOptions);
+  const nickname = session?.user?.name?.nickname;
+  const data = await getData(nickname);
+  const { avatar, bio, gender } = data.user;
 
   return (
     <>

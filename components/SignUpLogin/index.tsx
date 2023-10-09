@@ -18,7 +18,6 @@ export default function SignUpLogin (props: SignUpLoginProps) {
 
   const router = useRouter()
   const { register, handleSubmit, reset, formState: { errors }, } = useForm();
-  const [emailExist, setEmailExist] = useState('');
   const [usernameExist, setUsernameExist] = useState('');
   const [registerSuccess, setSuccessRegister] = useState(false);
   const [errorLogin, setErrorLogin] = useState('');
@@ -49,19 +48,12 @@ export default function SignUpLogin (props: SignUpLoginProps) {
   const handleRegister = async (data: any) => {
     try {
       const submitError = await submit(data);
+      
       if (submitError === 1) {
-        setEmailExist('Email already exists');
         setUsernameExist('Username already exists');
         return;
       }
-      if (submitError === 2) {
-        setEmailExist('Email already exists');
-        return;
-      }
-      if (submitError === 3) {
-        setUsernameExist('Username already exists');
-        return;
-      }
+      
       reset()
       if (signUp) {
         setSuccessRegister(true);
@@ -104,13 +96,6 @@ export default function SignUpLogin (props: SignUpLoginProps) {
   /**
    * When input, delete error on form
    */
-  const onEmailChange = () => {
-    setEmailExist('');
-  }
-
-  /**
-   * When input, delete error on form
-   */
   const onUsernameChange = () => {
     setUsernameExist('');
     setErrorLogin('');
@@ -143,9 +128,9 @@ export default function SignUpLogin (props: SignUpLoginProps) {
                     <input
                       className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder='Mobile number or Email'
-                      {...register("email", { required: true, onChange: onEmailChange })}
+                      {...register("email", { required: true })}
                     />
-                    {(errors.mobileNumber || emailExist) && <span className='text-red-600'>{emailExist ? emailExist :'This field is required'}</span>}
+                    {errors.mobileNumber && <span className='text-red-600'>{'This field is required'}</span>}
                   </div>
 
                   <div className="mt-2">
@@ -163,11 +148,11 @@ export default function SignUpLogin (props: SignUpLoginProps) {
               <div className="mt-2">
                 <input
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                  type="text"
+                  type="username"
                   placeholder={signUp ? 'Username' : 'Phone number, Username or Email'}
-                  {...register("username", { required: true, onChange: onUsernameChange })}
+                  {...register("username", { required: true, minLength: 6, onChange: onUsernameChange })}
                 />
-                {(errors.username || usernameExist) && <span className='text-red-600'>{usernameExist ? usernameExist : 'This field is required'}</span>}
+                {(errors.username || usernameExist) && <span className='text-red-600'>{usernameExist ? usernameExist : errors.username?.type === 'required' ? 'This field is required' : 'Username is at least 6 character'}</span>}
               </div>
 
               <div className="mt-2">
