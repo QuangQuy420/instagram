@@ -11,7 +11,7 @@ export default function Home (props: HomeProps) {
     <div className='grid grid-cols-12'>
       <div className='col-span-7'>
         <div>
-          <Story />  
+          <Story />
         </div>
         <div className='flex items-center flex-col'>
           <Post />

@@ -15,6 +15,7 @@ export const authOptions = {
                 try {
                   await connectMongo();
                   const user = await User.findOne({ username });
+                  
 
                   if (!user) {
                       return null;
@@ -25,8 +26,10 @@ export const authOptions = {
                   if (!passwordsMatch) {
                       return null;
                   }
-
-                  return user;
+                  
+                  return {
+                    name: user
+                  };
                 } catch (error) {
                   console.log("Error: ", error);
                 }
@@ -35,6 +38,7 @@ export const authOptions = {
     ],
   session: {
     strategy: "jwt",
+
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {

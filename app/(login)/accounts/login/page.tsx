@@ -13,7 +13,7 @@ export default async function Login (props: LoginProps) {
 
   const handleLogin = async (data: any) => {
     'use server'
-    console.log('data', data);
+    // console.log('data', data);
   }
 
   return (

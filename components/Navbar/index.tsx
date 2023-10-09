@@ -1,14 +1,21 @@
+'use client'
+
 import { faBars, faClapperboard, faHouse, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { faCompass, faComment, faHeart, faSquarePlus, faUser } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import * as React from 'react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export interface NavbarProps {
 }
 
 export default function Navbar(props: NavbarProps) {
+    const  {data: session}  = useSession();
+    const userInfo: any = session?.user?.name
+    
+    
     return (
         <>
             <div className='py-10 pl-6'>
@@ -45,7 +52,7 @@ export default function Navbar(props: NavbarProps) {
                 </div>
                 <div className="flex">
                     <FontAwesomeIcon className='w-6' icon={faUser} style={{color: "#000000",}} />
-                    <Link href='/pq.quy_'>Profile</Link>
+                    <Link href={userInfo?.nickname||'/'}>Profile</Link>
                 </div>
                 <div className="flex">
                     <FontAwesomeIcon className='w-6' icon={faBars} style={{color: "#000000",}} />

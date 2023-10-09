@@ -1,9 +1,6 @@
 import * as React from 'react';
 import SignUpLogin from '../../../../components/SignUpLogin';
-import connectMongo from '@/lib/mongo';
 import userRegister from '@/utils/user_register';
-import bcrypt from 'bcryptjs';
-import User from '@/models/User';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
@@ -23,20 +20,9 @@ export default async function SignUp (props: SignUpProps) {
    */
   async function myAction(data: any) {
     'use server';
-    await connectMongo();
-    const { email, username } = data
-    const emailExist = await User.findOne({ email }).select('_id');
-    const usernameExist = await User.findOne({ username }).select('_id');
-    if (emailExist && usernameExist) return 1;
-    if (emailExist) return 2;
-    if (usernameExist) return 3;
+    const response = await userRegister(data);
     
-    const password = await bcrypt.hash(data.password, 10);
-    
-    await userRegister({
-      ...data,
-      password: password
-    });
+    if(response) return 1;
   }
 
   return (
