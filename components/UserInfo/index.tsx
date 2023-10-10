@@ -6,12 +6,12 @@ export interface UserInfoProps {
   userInfo: {
     nickname: string,
     bio: string,
-    gender: string
+    fullName: string
   }
 }
 
 export default function UserInfo (props: UserInfoProps) {
-const { nickname, bio, gender } = props.userInfo;
+const { nickname, bio, fullName } = props.userInfo;
 
   return (
     <>
@@ -27,7 +27,7 @@ const { nickname, bio, gender } = props.userInfo;
               <button>0 follower</button>
               <button>92 following</button>
             </li>
-            <li>Phan Quang Quy</li>
+            <li>{fullName}</li>
             <li>{bio}</li>
             <li>Followed by xamtarot, alekxzsv, nguyenbalong___ + 22 more</li>
         </ul>
