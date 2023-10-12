@@ -15,8 +15,8 @@ const { nickname, bio, fullName } = props.userInfo;
 
   return (
     <>
-        <ul>
-            <li className='flex items-center mb-5'>
+        <ul className='flex-1'>
+            <li className='flex items-center mb-5 mt-1'>
                 <span className='text-xl mr-6'>{nickname}</span>
                 <button className='bg-gray-200 mr-2 px-4 py-1 rounded-lg text-sm font-semibold'>Edit profile</button>
                 <button className='bg-gray-200 mr-3 px-4 py-1 rounded-lg text-sm font-semibold'>View Archive</button>
