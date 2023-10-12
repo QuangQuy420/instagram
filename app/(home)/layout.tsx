@@ -18,7 +18,7 @@ export default function HomeLayout({
 }) {
     return (
       <html lang="en">
-        <body>
+        <body className='bg-white'>
           <AuthProvider>
             <div className='grid grid-cols-12'>
                 <div className='col-span-2'>
