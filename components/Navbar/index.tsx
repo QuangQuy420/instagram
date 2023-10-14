@@ -6,15 +6,39 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import * as React from 'react';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import CreateModal from '../CreateModal';
 
 export interface NavbarProps {
 }
 
 export default function Navbar(props: NavbarProps) {
+    const [isCreateModal, setIsCreateModal] = useState(false);
     const  {data: session}  = useSession();
     const userInfo: any = session?.user?.name
     
+    /**
+     * Handle when clicking a Crete button
+     */
+    const showCreateModal = () => {
+        if(!isCreateModal) {
+            setIsCreateModal(true);
+        }
+    }
+
+    /**
+     * The function will handle when close modal
+     * 
+     * @param isShow the value will be set to true when 
+     * @returns isCreateModal value
+     */
+    const handleShowModal = (isShow: boolean) => {
+        if (!isShow) {
+            setIsCreateModal(false);
+        }
+        return isCreateModal;
+    }
     
     return (
         <>
@@ -46,8 +70,9 @@ export default function Navbar(props: NavbarProps) {
                     <FontAwesomeIcon className='w-6' icon={faHeart} style={{color: "#000000",}} />
                     <span>Notifications</span>
                 </div>
-                <div className="flex">
+                <div className="flex" onClick={showCreateModal}>
                     <FontAwesomeIcon className='w-6' icon={faSquarePlus} style={{color: "#000000",}} />
+                    {isCreateModal && <CreateModal isShow={handleShowModal}></CreateModal>}
                     <span>Create</span>
                 </div>
                 <div className="flex">
