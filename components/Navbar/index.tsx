@@ -70,7 +70,7 @@ export default function Navbar(props: NavbarProps) {
                     <FontAwesomeIcon className='w-6' icon={faHeart} style={{color: "#000000",}} />
                     <span>Notifications</span>
                 </div>
-                <div className="flex" onClick={showCreateModal}>
+                <div className="flex cursor-pointer" onClick={showCreateModal}>
                     <FontAwesomeIcon className='w-6' icon={faSquarePlus} style={{color: "#000000",}} />
                     {isCreateModal && <CreateModal isShow={handleShowModal}></CreateModal>}
                     <span>Create</span>
