@@ -2,7 +2,7 @@ import connectMongo from '@/lib/mongo';
 import User from '@/models/User';
 import { NextResponse } from 'next/server';
 import bcrypt  from 'bcryptjs'
-import RegisterUser from '../../../utils/user_register'
+import RegisterUser from '../../../utils/userRegister'
 
 export async function POST( req : any ) {
     try {

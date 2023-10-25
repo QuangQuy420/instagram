@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { uploadImage } from '../../lib/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export interface CreateModalProps {
     isShow: Function
@@ -22,14 +24,24 @@ export default function CreateModal(props: CreateModalProps) {
         }
     }
 
-    const handleDrop = (e: any, type: string) => {
+    const handleDrop = async (e: any, type: string) => {
         if(type === 'drop') {
             e.preventDefault();
             setFileImage(e.dataTransfer.files);
-            console.log('image', fileImage);
+            const fileRef = ref(uploadImage, 'images/post');
+            uploadBytes(fileRef, e.dataTransfer.files[0]).then(data => {
+                getDownloadURL(data.ref).then(URL => {
+                    console.log(URL);
+                })
+            })
         } else {
             setFileImage(e.target.files);
-            console.log('input', fileImage);
+            const fileRef = ref(uploadImage, 'images/post1');
+            uploadBytes(fileRef, e.target.files[0]).then(data => {
+                getDownloadURL(data.ref).then(URL => {
+                    console.log(URL);
+                })
+            })
         }
     }
 
