@@ -16,20 +16,20 @@ export default function HomeLayout({
 }: {
   children: React.ReactNode
 }) {
-    return (
-      <html lang="en">
-        <body>
-          <AuthProvider>
-            <div className='grid grid-cols-12'>
-                <div className='col-span-2'>
-                    <Navbar />
-                </div>
-                <div className='col-span-10'>
-                    {children}
-                </div>
+  return (
+    <html lang="en">
+      <body className='bg-white'>
+        <AuthProvider>
+          <div className='grid grid-cols-12'>
+            <div className='col-span-2'>
+              <Navbar />
             </div>
-          </AuthProvider>
-        </body>
-      </html>
-    )
+            <div className='col-span-10'>
+              {children}
+            </div>
+          </div>
+        </AuthProvider>
+      </body>
+    </html>
+  )
 }

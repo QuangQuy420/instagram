@@ -36,20 +36,20 @@ export default async function User (props: UserProps) {
   const session = await getServerSession(authOptions);
   const nickname = session?.user?.name?.nickname;
   const data = await getData(nickname);
-  const { avatar, bio, gender } = data.user;
+  const { avatar, bio, gender, fullName } = data.user;
 
   return (
-    <>
-        <div className='flex'>
-            <div>
-                <Image
+    <div className='w-[935px] pt-6 px-4 mr-auto ml-auto'>
+        <div className='flex mb-8 '>
+            <div className=' ml-[70px] mr-[100px]'>
+                <Image className='rounded-full'
                     src={avatar}
                     width={150}
                     height={150}
                     alt="Avatar"
                 />
             </div>
-            <UserInfo userInfo={{ nickname, bio, gender }}/>
+            <UserInfo userInfo={{ nickname, bio, fullName }}/>
         </div>
         <div>
             <Story />
@@ -141,6 +141,6 @@ export default async function User (props: UserProps) {
             />
           </li>
         </ul>
-    </>
+    </div>
   );
 }

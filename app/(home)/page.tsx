@@ -6,7 +6,7 @@ import Post from '../../components/Post';
 export interface HomeProps {
 }
 
-export default function Home (props: HomeProps) {
+export default function Home(props: HomeProps) {
   return (
     <div className='grid grid-cols-12'>
       <div className='col-span-7'>
